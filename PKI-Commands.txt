@@ -1,0 +1,62 @@
+MAP NAMESPACE FOR AD:
+Certutil.exe –setreg ca\DSConfigDN "CN=Configuration,DC=Zenith-American,DC=local"
+
+******************************************************************************************************************************************
+CONFIGURE CRL PUBLICATION:
+Certutil -setreg CA\CRLPeriodUnits 1
+
+Certutil -setreg CA\CRLPeriod “Months”
+
+******************************************************************************************************************************************
+SET THE CRL OVERLAP:
+Certutil -setreg CA\CRLOverlapPeriodUnits 3
+
+Certutil -setreg CA\CRLOverlapPeriod “Days”
+
+******************************************************************************************************************************************
+SET THE VALIDITY PERIOD FOR ISSUED CERTIFICATES:
+Certutil -setreg CA\ValidityPeriodUnits 10
+
+Certutil -setreg CA\ValidityPeriod “Years”
+
+******************************************************************************************************************************************
+TO CONFIGURE CA AUDITING:
+Certutil -setreg CA\AuditFilter 127
+
+******************************************************************************************************************************************
+TO CONFIGURE AIA:
+Certutil -setreg CA\CACertPublicationURLs “1:C:\Windows\system32\CertSrv\CertEnroll\%1_%3%4.crt\n2:ldap:///CN=%7,CN=AIA,CN=Public Key Services,CN=Services,%6%11\n2:http://pki.Zenith-American.local/CertEnroll/%1_%3%4.crt”
+
+TO CONFIRM:
+certutil -getreg CA\CACertPublicationURLs
+
+******************************************************************************************************************************************
+TO CONFIGURE CDP:
+certutil -setreg CA\CRLPublicationURLs “1:C:\Windows\system32\CertSrv\CertEnroll\%3%8%9.crl\n10:ldap:///CN=%7%8,CN=%2,CN=CDP,CN=Public Key Services,CN=Services,%6%10\n2:http://pki.Zenith-American.local/CertEnroll/%3%8%9.crl”
+
+TO CONFIRM:
+certutil -getreg CA\CRLPublicationURLs
+
+******************************************************************************************************************************************
+net stop certsvc
+
+net start certsvc
+
+certutil -crl
+
+
+
+
+DO I NEED THIS:
+certutil -setreg CA\CRLDeltaPeriodUnits 0
+
+certutil -setreg CA\CRLDeltaPeriod “days”
+
+
+
+
+
+
+
+
+
