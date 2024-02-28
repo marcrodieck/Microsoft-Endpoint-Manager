@@ -114,7 +114,10 @@ CERTUTIL -setreg CA\AuditFilter 127
 
 CERTUTIL -setreg CA\DSConfigDN "CN=Configuration,DC=zenith-american,DC=local"
 
-
+$currentFileAiaUri = Get-CAAuthorityInformationAccess | ?{ $_.Uri -match '^file:' }
+Remove-CAAuthorityInformationAccess -Uri $currentFileAiaUri.Uri -Confirm:$false
+$currentFileCrlUri = Get-CACrlDistributionPoint | ?{ $_.Uri -match '^file:' }
+Remove-CACrlDistributionPoint -Uri $currentFileCrlUri.Uri -Confirm:$false
 ******************************************************************************************************************************************
 
 
