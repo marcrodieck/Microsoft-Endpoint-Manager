@@ -48,7 +48,7 @@ certutil -crl
 
 
 
-
+Issuing CA:
 CAPolicy.inf
 [Version]
 Signature = "$Windows NT$"
@@ -57,7 +57,6 @@ Signature = "$Windows NT$"
 
 LoadDefaultTemplates=0
 
-Issuing CA:
 Install-WindowsFeature ADCS-Cert-Authority,ADCS-Web-Enrollment,RSAT-ADDS -IncludeManagementTools
 $rootDSE = Get-ADRootDSE
 $caCommonName = 'ZAS-ISSUING-CA1'
@@ -98,6 +97,10 @@ New-SmbShare -Name $shareName -Path $directory -FullAccess "$($env:USERDNSDOMAIN
 New-WebVirtualDirectory -Site "Default Web Site" -Name $shareName -PhysicalPath $directory -Force
 Set-WebConfigurationProperty -filter system.webServer/security/requestFiltering -name allowDoubleEscaping -value true -PSPath 'IIS:\Sites\Default Web Site'
 
+
+******************************************************************************************************************************************
+
+Root CA:
 auditpol /set /subcategory:"other system events" /success:enable /failure:enable
 CERTUTIL -setreg CA\CRLPeriod "Years"
 CERTUTIL -setreg CA\CRLPeriodUnits 1
@@ -109,6 +112,10 @@ CERTUTIL -setreg CA\ValidityPeriod "Years"
 CERTUTIL -setreg CA\validityPeriodUnits 10
 CERTUTIL -setreg CA\AuditFilter 127
 
+CERTUTIL -setreg CA\DSConfigDN "CN=Configuration,DC=zenith-american,DC=local"
+
+
+******************************************************************************************************************************************
 
 
 
