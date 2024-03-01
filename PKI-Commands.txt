@@ -118,6 +118,22 @@ $currentFileAiaUri = Get-CAAuthorityInformationAccess | ?{ $_.Uri -match '^file:
 Remove-CAAuthorityInformationAccess -Uri $currentFileAiaUri.Uri -Confirm:$false
 $currentFileCrlUri = Get-CACrlDistributionPoint | ?{ $_.Uri -match '^file:' }
 Remove-CACrlDistributionPoint -Uri $currentFileCrlUri.Uri -Confirm:$false
+
+$currentHttpAiaUri = Get-CAAuthorityInformationAccess | ?{ $_.Uri -match '^http:' }
+$newHttpAiaUri = ($currentHttpAiaUri.Uri).Replace('
+http://<ServerDNSName>/CertEnroll/','http://pki.Zenith-American.local/pki')
+Add-CAAuthorityInformationAccess -Uri $newHttpAiaUri -AddToCertificateAia -Confirm:$false
+Remove-CAAuthorityInformationAccess -Uri $currentHttpAiaUri.Uri -Confirm:$false
+$currentHttpCrlUri = Get-CACrlDistributionPoint | ?{ $_.Uri -match '^http:' }
+$newHttpCrlUri = ($currentHttpCrlUri.Uri).Replace('
+http://<ServerDNSName>/CertEnroll/','http://pki.Zenith-American.local/pki')
+Add-CACRLDistributionPoint -Uri $newHttpCrlUri -AddToCertificateCdp -Confirm:$false
+Remove-CACrlDistributionPoint -Uri $currentHttpCrlUri.Uri -Confirm:$false
+Restart-Service certsvc
+
+
+
+
 ******************************************************************************************************************************************
 
 
